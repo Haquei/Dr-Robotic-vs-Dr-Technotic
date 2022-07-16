@@ -143,7 +143,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Range: 7.03
-  FireRate: 1
+  FireRate: 10
+  Ammo: 20
+  Health: 200
+  ReloadTime: 2
   EnemyTag: Enemy
   BulletPrefab: {fileID: 1091257620287748047, guid: db754a75722d96645bc8980610e4f248, type: 3}
   FirePoint: {fileID: 256839045364956448}
