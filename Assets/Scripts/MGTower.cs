@@ -48,6 +48,7 @@ public class MGTower : MonoBehaviour
             Destroy(gameObject);
           
         }
+       
     }
     void UpdateTarget()
     {
