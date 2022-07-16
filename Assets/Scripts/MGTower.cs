@@ -43,6 +43,11 @@ public class MGTower : MonoBehaviour
             FireCountDown = 1f / FireRate;
         }
         FireCountDown -= Time.deltaTime;
+        if (Health == 0)
+        {
+            Destroy(gameObject);
+          
+        }
     }
     void UpdateTarget()
     {
@@ -113,11 +118,5 @@ public class MGTower : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, Range);
     }
-    void Death()
-    {
-        if (Health == 0)
-        {
-            Destroy(gameObject);
-        }
-    }
+   
 }
