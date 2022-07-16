@@ -136,7 +136,14 @@ public class Grid : MonoBehaviour
     public Vector3 MapPositionToGrid(Vector3 position, int widthInBlocks, int heightInBlocks)
     {
         GridPoint anchorPoint = MapToAnchorPointOnGrid(position);
-        return new Vector3(anchorPoint.X + 1 + (widthInBlocks-1) * blockSize / 2f, 0, anchorPoint.Z + 1 + (heightInBlocks-1) * blockSize / 2f);
+
+        float offsetX = widthInBlocks * blockSize / 2f;
+        float offsetZ = heightInBlocks * blockSize / 2f;
+        return new Vector3(
+            anchorPoint.X + offsetX, 
+            0, 
+            anchorPoint.Z + offsetZ
+        );
     }
 
     public void ShowPlacementPreview(Vector3 position, int width, int height)
