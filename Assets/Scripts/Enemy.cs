@@ -1,21 +1,23 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(NavMeshAgent), typeof(Health))]
 public class Enemy : MonoBehaviour
 {
 
     private NavMeshAgent myNavMeshAgent;
     private Transform target;
+    private Health myHealth;
 
     private bool isFrozen;
     private bool isSlowed;
 
     void Awake()
     {
-        myNavMeshAgent = GetComponent<NavMeshAgent>();    
+        myNavMeshAgent = GetComponent<NavMeshAgent>();
+        myHealth = GetComponent<Health>();
+        myHealth.onDied.AddListener(Die);
     }
 
     void Start()
@@ -28,6 +30,16 @@ public class Enemy : MonoBehaviour
         if (isFrozen) return;
 
         myNavMeshAgent.SetDestination(target.position);    
+    }
+
+    public void TakeDamage(float amount)
+    {
+        myHealth.TakeDamage(amount);
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
     }
 
     // Freeze the enemy for a given amount of time.

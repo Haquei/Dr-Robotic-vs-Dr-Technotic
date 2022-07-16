@@ -96,6 +96,16 @@ public class InputManager : MonoBehaviour
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            Enemy[] enemies = FindObjectsOfType<Enemy>();
+            foreach (Enemy enemy in enemies)
+            {
+                enemy.TakeDamage(5);
+            }
+        }
+
+
         // TODO movement indicator / affordance
 
         // TODO left click to place buildings
