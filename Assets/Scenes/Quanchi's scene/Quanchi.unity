@@ -313,6 +313,10 @@ PrefabInstance:
       value: MachineGunTower
       objectReference: {fileID: 0}
     - target: {fileID: 256839045859096825, guid: 9514de773caf8204f8dda1844a697a07, type: 3}
+      propertyPath: Health
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 256839045859096825, guid: 9514de773caf8204f8dda1844a697a07, type: 3}
       propertyPath: FireRate
       value: 5
       objectReference: {fileID: 0}

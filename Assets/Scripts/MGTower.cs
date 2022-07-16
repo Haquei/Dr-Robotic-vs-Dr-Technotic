@@ -12,6 +12,8 @@ public class MGTower : MonoBehaviour
     public float FireRate = 1f;
     private float FireCountDown = 0f;
     public int Ammo = 20;
+    public int Health = 200;
+
     public float ReloadTime;
     bool IsReloading = false;
 
@@ -80,6 +82,7 @@ public class MGTower : MonoBehaviour
         {
             GameObject BulletGO = (GameObject)Instantiate(BulletPrefab, FirePoint.position, FirePoint.rotation);
             Ammo--;
+            Health--;
             MGTowerbullet bullet = BulletGO.GetComponent<MGTowerbullet>();
             if (bullet != null)
             {
@@ -109,5 +112,12 @@ public class MGTower : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, Range);
+    }
+    void Death()
+    {
+        if (Health == 0)
+        {
+            Destroy(gameObject);
+        }
     }
 }
