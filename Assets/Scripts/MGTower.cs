@@ -11,6 +11,11 @@ public class MGTower : MonoBehaviour
     public float Range;
     public float FireRate = 1f;
     private float FireCountDown = 0f;
+    public int Ammo = 20;
+    public int Health = 200;
+
+    public float ReloadTime;
+    bool IsReloading = false;
 
 
 
@@ -22,7 +27,7 @@ public class MGTower : MonoBehaviour
     public Transform FirePoint;
     void Start()
     {
-        InvokeRepeating("UpdateTarget", 0,0.5f);
+        InvokeRepeating("UpdateTarget", 0 ,5);
     }
 
     // Update is called once per frame
@@ -38,6 +43,11 @@ public class MGTower : MonoBehaviour
             FireCountDown = 1f / FireRate;
         }
         FireCountDown -= Time.deltaTime;
+        if (Health == 0)
+        {
+            Destroy(gameObject);
+          
+        }
     }
     void UpdateTarget()
     {
@@ -73,22 +83,40 @@ public class MGTower : MonoBehaviour
     {
 
 
-        if (Target != null)
+        if (Target != null && IsReloading != true)
         {
             GameObject BulletGO = (GameObject)Instantiate(BulletPrefab, FirePoint.position, FirePoint.rotation);
+            Ammo--;
+            Health--;
             MGTowerbullet bullet = BulletGO.GetComponent<MGTowerbullet>();
             if (bullet != null)
             {
                 bullet.Chase(Target);
             }
+            if (Ammo == 0)
+            {
+                IsReloading = true;
+                StartCoroutine(Reload());
+                return;
+
+            }
         }
+        
 
 
+    }
 
+    IEnumerator Reload()
+    {
+        yield return new WaitForSeconds(ReloadTime);
+        Ammo = 20;
+        IsReloading = false;
+        
     }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, Range);
     }
+   
 }
