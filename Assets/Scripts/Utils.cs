@@ -2,23 +2,6 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
-public static class MathHelper
-{
-    public static float Mod(float x, float m)
-    {
-        float r = x % m;
-        return r < 0 ? r + m : r;
-    }
-    public static Vector3 Mod(Vector3 v, float m)
-    {
-        return new Vector3(
-            Mod(v.x, m),
-            Mod(v.y, m),
-            Mod(v.z, m)
-        );
-    }
-}
-
 public static class ParabolaHelper
 {
 

@@ -39,9 +39,12 @@ public class InputManager : MonoBehaviour
         if (Input.GetKey(KeyCode.Q))
         {
             buildGrid.ShowGrid();
+            buildGrid.ShowPlacementPreview(clickPosition, 1, 1);
             builder.ThrowBuildingPreview(clickPosition);
 
-            if (Input.GetMouseButtonDown(LEFT_CLICK))
+            bool canPlace = buildGrid.CanPlaceObjectOnGrid(clickPosition, 1, 1);
+
+            if (Input.GetMouseButtonDown(LEFT_CLICK) && canPlace)
             {
                 builder.ThrowBuilding(clickPosition, 1);
                 builder.CancelPreview();
@@ -53,9 +56,12 @@ public class InputManager : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
         {
             buildGrid.ShowGrid();
+            buildGrid.ShowPlacementPreview(clickPosition, 2, 2);
             builder.ThrowBuildingPreview(clickPosition);
 
-            if (Input.GetMouseButtonDown(LEFT_CLICK))
+            bool canPlace = buildGrid.CanPlaceObjectOnGrid(clickPosition, 2, 2);
+
+            if (Input.GetMouseButtonDown(LEFT_CLICK) && canPlace)
             {
                 builder.ThrowBuilding(clickPosition, 2);
                 builder.CancelPreview();
@@ -67,6 +73,7 @@ public class InputManager : MonoBehaviour
         if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.Q))
         {
             buildGrid.HideGrid();
+            buildGrid.HidePlacePreview();
             builder.CancelPreview();
         }
 

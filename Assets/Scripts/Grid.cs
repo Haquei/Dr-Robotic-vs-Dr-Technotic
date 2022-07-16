@@ -30,6 +30,9 @@ public class Grid : MonoBehaviour
     [SerializeField] MeshRenderer gridPreview;
     [SerializeField] MeshFilter meshFilter = default;
 
+    [SerializeField] MeshRenderer placementPreview;
+    [SerializeField] MeshFilter placementPreviewMeshFilter;
+
     private float blockSize = 2;
 
     // Precalculated cause these are used all over the place.
@@ -77,6 +80,7 @@ public class Grid : MonoBehaviour
     public void PlaceObjectOnGrid(Vector3 pos, IPlaceable toPlace)
     {
         GridIndex gridIndex = MapPositionToGridIndex(pos);
+        Debug.Log($"Placed at [{gridIndex.X}: {gridIndex.Z}]");
 
         Vector3 centeredPosition = MapPositionToGrid(pos, toPlace.WidthInBlocks, toPlace.HeightInBlocks);
         toPlace.Place(centeredPosition);
@@ -115,20 +119,74 @@ public class Grid : MonoBehaviour
         return !isThereExternalObstacle;
     }
 
+    public bool CanPlaceObjectOnGrid(Vector3 pos, int width, int height)
+    {
+        GridIndex gridIndex = MapPositionToGridIndex(pos);
+        bool isGridEmpty = IsGridEmpty(gridIndex, width, height);
+        if (!isGridEmpty) return false;
+
+        var center = MapPositionToGrid(pos, width, height);
+        var halfExtents = new Vector3(width * blockSize * 0.5f, 2f, height * blockSize * 0.5f);
+        bool isThereExternalObstacle = Physics.CheckBox(center, halfExtents, Quaternion.identity, gridObstaclesLayer);
+
+        return !isThereExternalObstacle;
+    }
+
     // Map the given position to the grid, centered from the anchor point
     public Vector3 MapPositionToGrid(Vector3 position, int widthInBlocks, int heightInBlocks)
     {
         GridPoint anchorPoint = MapToAnchorPointOnGrid(position);
-        return new Vector3(anchorPoint.X + widthInBlocks * blockSize / 2f, 0, anchorPoint.Z + heightInBlocks * blockSize / 2f);
+        return new Vector3(anchorPoint.X + 1 + (widthInBlocks-1) * blockSize / 2f, 0, anchorPoint.Z + 1 + (heightInBlocks-1) * blockSize / 2f);
+    }
+
+    public void ShowPlacementPreview(Vector3 position, int width, int height)
+    {
+        GridPoint blPoint = MapToAnchorPointOnGrid(position);
+        
+        // TODO Create red/green preview based on if you can build here or not.
+        var mesh = new Mesh();
+        var verticies = new List<Vector3>();
+        var indicies = new List<int>();
+
+        float x = blPoint.X;// - blockSize/2;
+        float z = blPoint.Z;// - blockSize / 2;
+
+        verticies.Add(new Vector3(x, 0, z));
+        verticies.Add(new Vector3(x + width * blockSize, 0, z));
+        verticies.Add(new Vector3(x + width * blockSize, 0, z + height * blockSize));
+        verticies.Add(new Vector3(x, 0, z + height * blockSize));
+        indicies.Add(0);
+        indicies.Add(1);
+        indicies.Add(2);
+        indicies.Add(3);
+
+        mesh.vertices = verticies.ToArray();
+        mesh.SetIndices(indicies.ToArray(), MeshTopology.Quads, 0);
+        placementPreviewMeshFilter.mesh = mesh;
+
+        placementPreview.material = new Material(Shader.Find("Sprites/Default"));
+
+        if (CanPlaceObjectOnGrid(position, width, height)) {
+            placementPreview.material.color = Color.green;
+        } else
+        {
+            placementPreview.material.color = Color.red;
+        }
+        placementPreview.enabled = true;
+    }
+
+    public void HidePlacePreview()
+    {
+        placementPreview.enabled = false;
     }
 
     // Returns given position mapped to anchor point on the grid (Bottom left block).
     private GridPoint MapToAnchorPointOnGrid(Vector3 position)
     {
-        var remainderVector = MathHelper.Mod(position, blockSize);
+        GridIndex gridIndex = MapPositionToGridIndex(position);
         return new GridPoint(
-            position.x - remainderVector.x,
-            position.z - remainderVector.z
+            bottomLeft.x + blockSize * gridIndex.X,
+            bottomLeft.z + blockSize * gridIndex.Z
         );
     }
 
@@ -227,6 +285,7 @@ public class Grid : MonoBehaviour
         gridPreview.material.color = Color.white;
         HideGrid();
     }
+
 
     /* ===============================================================
                                     Gizmos
