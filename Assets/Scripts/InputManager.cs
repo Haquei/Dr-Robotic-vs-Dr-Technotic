@@ -77,6 +77,16 @@ public class InputManager : MonoBehaviour
             builder.CancelPreview();
         }
 
+        // Random testing buttons
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Enemy[] enemies = FindObjectsOfType<Enemy>();
+            foreach (Enemy enemy in enemies)
+            {
+                enemy.Freeze(2);
+            }
+        }
+
         // TODO movement indicator / affordance
 
         // TODO left click to place buildings
