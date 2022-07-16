@@ -14,6 +14,7 @@ public class MGTower : MonoBehaviour
 
 
 
+
     [Header("UnityField")]
 
     public string EnemyTag = "Enemy";
@@ -21,7 +22,7 @@ public class MGTower : MonoBehaviour
     public Transform FirePoint;
     void Start()
     {
-        InvokeRepeating("UpdateTarget", 0f, 0.5f);
+        InvokeRepeating("UpdateTarget", 0,0.5f);
     }
 
     // Update is called once per frame

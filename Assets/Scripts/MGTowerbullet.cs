@@ -35,6 +35,6 @@ public class MGTowerbullet : MonoBehaviour
 
     void HitTarget()
     {
-
+        Destroy(gameObject);
     }
 }
