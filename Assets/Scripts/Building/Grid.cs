@@ -7,7 +7,10 @@ public interface IPlaceable
 {
     int WidthInBlocks { get; }
     int HeightInBlocks { get; }
+    int GridX { get; }
+    int GridZ { get; }
 
+    void SetGridIndicies(int X, int Z);
     void Place(Vector3 position);
 }
 
@@ -84,6 +87,7 @@ public class Grid : MonoBehaviour
 
         Vector3 centeredPosition = MapPositionToGrid(pos, toPlace.WidthInBlocks, toPlace.HeightInBlocks);
         toPlace.Place(centeredPosition);
+        toPlace.SetGridIndicies(gridIndex.X, gridIndex.Z);
 
         for (int x = gridIndex.X; x < gridIndex.X + toPlace.WidthInBlocks; x++)
         {
@@ -102,6 +106,13 @@ public class Grid : MonoBehaviour
     public void ClearGrid(Vector3 pos, int width, int height)
     {
         GridIndex gridIndex = MapPositionToGridIndex(pos);
+        ClearArea(gridIndex, width, height);
+        Debug.Log($"cleared [{gridIndex.X}: {gridIndex.Z}] -> {width} ^ {height}");
+    }
+
+    public void ClearGrid(int X, int Z, int width, int height)
+    {
+        GridIndex gridIndex = new GridIndex(X, Z);
         ClearArea(gridIndex, width, height);
     }
 

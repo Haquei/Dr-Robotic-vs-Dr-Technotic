@@ -24,6 +24,7 @@ public abstract class Tower : MonoBehaviour
 
     void Update()
     {
+        if (health <= 0f) Die();
         if (Target == null) Target = FindTarget();
         if (Target == null) return;
 
@@ -33,6 +34,13 @@ public abstract class Tower : MonoBehaviour
             lastFiredTime = Time.time;
             Shoot();
         }
+    }
+
+    private void Die()
+    {
+        Building bc = GetComponent<Building>();
+        FindObjectOfType<Grid>().ClearGrid(bc.GridX, bc.GridZ, bc.WidthInBlocks, bc.HeightInBlocks);
+        Destroy(gameObject);
     }
 
     protected virtual bool CanShoot()
