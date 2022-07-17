@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class FBTTower : MonoBehaviour
 {
-    //Vector3 FBTargetPos;
-    //private Transform FBTargetFirstPos;
+    public AudioSource PlacementAudio;
+    public AudioSource ShootingFBAudio;
+
+
     public float Health = 15;
     public Transform Target;
     public Transform FirePoint;
@@ -17,6 +19,7 @@ public class FBTTower : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        PlacementAudio.Play();
         InvokeRepeating("UpdateTarget", 0, 5f);
     }
 
@@ -67,6 +70,7 @@ public class FBTTower : MonoBehaviour
     void ShootFireBall()
     {
        GameObject FireBall =  (GameObject)Instantiate(FBPrefab, FirePoint.position, FirePoint.rotation);
+        ShootingFBAudio.Play();
         //FBTargetPos = FBTargetFirstPos.transform.position;
         //FireBall.transform.position = Vector3.MoveTowards(FirePoint.transform.position,Target.transform.position,100f * Time.deltaTime);
         IsReloading = true;

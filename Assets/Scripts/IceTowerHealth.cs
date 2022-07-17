@@ -5,8 +5,10 @@ using UnityEngine;
 public class IceTowerHealth : MonoBehaviour
 {
     public float Health = 5f;
+    public AudioSource PlacementAudio;
     void Start()
     {
+        PlacementAudio.Play();
         StartCoroutine(HealthTimer());
     }
 

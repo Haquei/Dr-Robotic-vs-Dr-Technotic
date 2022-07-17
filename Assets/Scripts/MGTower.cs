@@ -31,6 +31,7 @@ public class MGTower : MonoBehaviour
     {
         
         InvokeRepeating("UpdateTarget", 0 ,5);
+        Placement.Play();
     }
 
     // Update is called once per frame
@@ -90,6 +91,7 @@ public class MGTower : MonoBehaviour
 
         if (Target != null && IsReloading != true)
         {
+            ShootAudio.Play();
             GameObject BulletGO = (GameObject)Instantiate(BulletPrefab, FirePoint.position, FirePoint.rotation);
             Ammo--;
             Health--;

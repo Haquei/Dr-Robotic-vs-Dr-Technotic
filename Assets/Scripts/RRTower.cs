@@ -8,8 +8,11 @@ public class RRTower : MonoBehaviour
     public float Range;
     public float HealthTime = 10;
     bool IsReloading = false;
+    public AudioSource PlacementAudio;
+    public AudioSource ShootingAudio;
     void Start()
     {
+        PlacementAudio.Play();
         InvokeRepeating("UpdateTarget", 0, 1f);
     }
 
@@ -59,7 +62,9 @@ public class RRTower : MonoBehaviour
     }
     void KillTarget()
     {
-        Destroy(Target);
+        ShootingAudio.Play();
+        StartCoroutine(Killing());
+        
         
         IsReloading = true;
         StartCoroutine(Reload());
@@ -76,5 +81,11 @@ public class RRTower : MonoBehaviour
     {
         yield return new WaitForSeconds(HealthTime);
         Destroy(gameObject);
+    }
+    IEnumerator Killing
+        ()
+    {
+        yield return new WaitForSeconds(0.5f);
+        Destroy(Target);
     }
 }

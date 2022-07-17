@@ -6,21 +6,24 @@ public class FreezeArea : MonoBehaviour
 {
     public float RecoveryTime = 5f;
     bool IsRecovering = false;
+    public AudioSource FreezingAudio;
     void Start()
     {
         
     }
 
-    // Update is called once per frame
+   
     void Update()
     {
         
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy" && IsRecovering == false)
         {
+            FreezingAudio.Play();
             Freeze(collision.collider);
+      
             
 
         }
@@ -29,8 +32,11 @@ public class FreezeArea : MonoBehaviour
 
     public void Freeze(Collider other)
     {
+       
         other.gameObject.GetComponent<Enemy>().Freeze(5);
         IsRecovering = true;
+      
+        
       
         
         
