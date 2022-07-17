@@ -1,16 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenuManager : MonoBehaviour
 {
-    public GameObject player_canvas, main_menu_canvas, options_canvas;
+    public GameObject main_menu_canvas, options_canvas;
     private int options_index = 0;
+    private int scene_target = 1;
 
     public void PlayGame()
     {
-        main_menu_canvas.SetActive(false);
-        player_canvas.SetActive(true);
+        SceneManager.LoadScene(scene_target);
     }
     
     public void Options()
