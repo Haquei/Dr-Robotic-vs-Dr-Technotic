@@ -7,7 +7,7 @@ public class Health : MonoBehaviour
     [SerializeField] float maxHealth;
     public UnityEvent onDied;
 
-    float currentHealth;
+    public float currentHealth;
 
     private void Start()
     {
@@ -23,5 +23,11 @@ public class Health : MonoBehaviour
     public void Die()
     {
         onDied.Invoke();
+    }
+
+    public void AddHealth(float amount)
+    {
+        // Don't do any checks just add it.
+        currentHealth += amount;
     }
 }
