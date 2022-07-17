@@ -104,6 +104,7 @@ MonoBehaviour:
   buildingOrbPrefab: {fileID: 5565948137451079180, guid: 47d7750def2886147ac0a79cc682db2c, type: 3}
   buildRange: 8
   buildGrid: {fileID: 0}
+  buildingOptions: []
 --- !u!1001 &7818018154219228064
 PrefabInstance:
   m_ObjectHideFlags: 0
