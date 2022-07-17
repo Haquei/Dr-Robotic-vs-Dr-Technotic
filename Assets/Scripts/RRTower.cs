@@ -6,7 +6,7 @@ public class RRTower : MonoBehaviour
 {
     private GameObject Target;
     public float Range;
-
+    public float HealthTime = 10;
     bool IsReloading = false;
     void Start()
     {
@@ -71,5 +71,10 @@ public class RRTower : MonoBehaviour
         IsReloading = false;
        
        
+    }
+    IEnumerator Health()
+    {
+        yield return new WaitForSeconds(HealthTime);
+        Destroy(gameObject);
     }
 }

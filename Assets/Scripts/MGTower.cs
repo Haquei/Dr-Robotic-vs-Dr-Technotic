@@ -14,7 +14,7 @@ public class MGTower : MonoBehaviour
     public int Ammo = 20;
     public int Health = 200;
 
-    public float ReloadTime;
+    private float ReloadTime = 2f;
     bool IsReloading = false;
 
 
@@ -25,8 +25,11 @@ public class MGTower : MonoBehaviour
     public string EnemyTag = "Enemy";
     public GameObject BulletPrefab;
     public Transform FirePoint;
+    public AudioSource Placement;
+    public AudioSource ShootAudio;
     void Start()
     {
+        
         InvokeRepeating("UpdateTarget", 0 ,5);
     }
 
@@ -48,6 +51,7 @@ public class MGTower : MonoBehaviour
             Destroy(gameObject);
           
         }
+       
        
     }
     void UpdateTarget()

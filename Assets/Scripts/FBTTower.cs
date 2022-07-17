@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class FBTTower : MonoBehaviour
 {
-    Vector3 FBTargetPos;
-    private Transform FBTargetFirstPos;
-
+    //Vector3 FBTargetPos;
+    //private Transform FBTargetFirstPos;
+    public float Health = 15;
     public Transform Target;
     public Transform FirePoint;
     public float Range = 7f;
@@ -76,6 +76,11 @@ public class FBTTower : MonoBehaviour
     {
         yield return new WaitForSeconds(5);
         IsReloading = false;
+    }
+    IEnumerator Death ()
+    {
+        yield return new WaitForSeconds(Health);
+        Destroy(gameObject);
     }
 
 }
