@@ -7,6 +7,7 @@ public abstract class Tower : MonoBehaviour
 
     public float health = 15;
     public Transform firepoint;
+    public Transform topBit;
 
     [Header("Attributes")]
     public float Range = 7f;
@@ -27,6 +28,8 @@ public abstract class Tower : MonoBehaviour
         if (health <= 0f) Die();
         if (Target == null) Target = FindTarget();
         if (Target == null) return;
+
+        transform.rotation = Quaternion.LookRotation(transform.position - Target.transform.position);
 
         if (CanShoot())
         {
