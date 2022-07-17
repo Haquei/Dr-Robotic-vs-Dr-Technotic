@@ -18,17 +18,24 @@ public class InputManager : MonoBehaviour
 
     [SerializeField] Grid buildGrid;
 
+    // TODO make better
+    Building randomBuilding;
+
     void Start()
     {
         movementComponent = builder.GetComponent<Movement>();
 
         lastRightClickTime = -clickDelay;
+        randomBuilding = builder.PickRandomBuilding();
     }
 
     // Update is called once per frame
     void Update()
     {
         Vector3 clickPosition = Camera.main.CastMouseOnFloor();
+
+        // Making builder face the mouse since he's not moving anymore.
+        builder.transform.LookAt(clickPosition);
 
         if (Input.GetMouseButton(RIGHT_CLICK) && CanRightClick)
         {
@@ -39,21 +46,22 @@ public class InputManager : MonoBehaviour
         if (Input.GetKey(KeyCode.Q))
         {
             buildGrid.ShowGrid();
-            buildGrid.ShowPlacementPreview(clickPosition, 1, 1);
+            buildGrid.ShowPlacementPreview(clickPosition, randomBuilding.WidthInBlocks, randomBuilding.HeightInBlocks);
             builder.ThrowBuildingPreview(clickPosition);
 
-            bool canPlace = buildGrid.CanPlaceObjectOnGrid(clickPosition, 1, 1);
+            bool canPlace = buildGrid.CanPlaceObjectOnGrid(clickPosition, randomBuilding.WidthInBlocks, randomBuilding.HeightInBlocks);
 
             if (Input.GetMouseButtonDown(LEFT_CLICK) && canPlace)
             {
-                builder.ThrowBuilding(clickPosition, 1);
+                builder.ThrowBuilding(clickPosition, randomBuilding);
                 builder.CancelPreview();
+                randomBuilding = builder.PickRandomBuilding();
             }
         
         } 
 
         // TODO dedup when randomization done.
-        if (Input.GetKey(KeyCode.W))
+        /*if (Input.GetKey(KeyCode.W))
         {
             buildGrid.ShowGrid();
             buildGrid.ShowPlacementPreview(clickPosition, 2, 2);
@@ -67,7 +75,7 @@ public class InputManager : MonoBehaviour
                 builder.CancelPreview();
             }
 
-        }
+        }*/
         
 
         if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.Q))

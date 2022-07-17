@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Movement), typeof(PlacementPreview))]
@@ -16,6 +14,8 @@ public class Builder : MonoBehaviour
     [SerializeField] Grid buildGrid;
 
     private PlacementPreview myPlacementPreview;
+
+    [SerializeField] Building[] buildingOptions;
 
     // Start is called before the first frame update
     void Awake()
@@ -44,19 +44,17 @@ public class Builder : MonoBehaviour
         myPlacementPreview.ClearPreview();
     }
 
-    public void ThrowBuilding(Vector3 position, int bIndex)
+    public void ThrowBuilding(Vector3 position, Building building)
     {
-        // TODO replace with randomization
-        Building pref;
-        if (bIndex == 1)
-        {
-            pref = buildingPrefab;
-        } else
-        {
-            pref = bigBuildingPrefab;
-        }
-
         BuildingOrb orb = Instantiate(buildingOrbPrefab);
-        orb.Launch(pref, buildGrid, transform.position + Vector3.up * 2, position);
+        orb.PassData(building, buildGrid);
+        orb.Launch(transform.position + Vector3.up * 2, position);
+    }
+
+    public Building PickRandomBuilding()
+    {
+        System.Random rnd = new System.Random();
+        int index = rnd.Next(buildingOptions.Length);
+        return buildingOptions[index];
     }
 }
