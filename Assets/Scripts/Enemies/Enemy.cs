@@ -1,14 +1,23 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent), typeof(Health))]
 public class Enemy : MonoBehaviour
 {
+    private const float AGGRO_RADIUS = 6f;
+
+    [SerializeField] float attackRange = 5f;
+    [SerializeField] float timeBetweenAttacks = 2f;
+    [SerializeField] float attackDamage = 5f;
+    private float lastAttackTime = -100f;
 
     protected NavMeshAgent myNavMeshAgent;
     protected Transform target;
     private Health myHealth;
+
+    private Tower towerTarget;
 
     private bool isFrozen;
     private bool isSlowed;
@@ -29,7 +38,42 @@ public class Enemy : MonoBehaviour
     {
         if (isFrozen) return;
 
+        if (towerTarget != null)
+        {
+            float dist = Vector3.Distance(transform.position, towerTarget.transform.position);
+            if (dist <= attackRange)
+            {
+                myNavMeshAgent.SetDestination(transform.position);
+                TryAttack();
+            }
+            return;
+        }
+
+        // Check for towers in range
+        Tower[] towers = nearbyTowers();
+        if (towers.Length != 0)
+        {
+            towerTarget = towers[0];
+            myNavMeshAgent.SetDestination(towerTarget.transform.position);
+            return;
+        }
+
+        float distToTarget = Vector3.Distance(transform.position, target.transform.position);
+        if (distToTarget < 3.5f)
+        {
+            Debug.Log("HIT YOUR CORE!"); // TODO lose condition.
+            Die();
+            return;
+        }
+
         Move();
+    }
+
+    void TryAttack() {
+        if (Time.time - lastAttackTime < timeBetweenAttacks) return;
+
+        towerTarget.health -= attackDamage;
+        lastAttackTime = Time.time;
     }
 
     public void TakeDamage(float amount)
@@ -53,6 +97,15 @@ public class Enemy : MonoBehaviour
         //  target twice. (ez fix for this and will feel better).
         if (isFrozen) return;
         StartCoroutine(FreezeForSeconds(seconds));
+    }
+
+    private Tower[] nearbyTowers()
+    {
+        return Physics.OverlapSphere(transform.position, AGGRO_RADIUS)
+            .Select(hit => hit.GetComponent<Tower>())
+            .Where(tower => tower != null)
+            .OrderBy(tower => Vector3.Distance(tower.transform.position, transform.position))
+            .ToArray();
     }
 
     IEnumerator FreezeForSeconds(float seconds)
